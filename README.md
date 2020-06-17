@@ -59,11 +59,12 @@ $ php /path/to/moodle/admin/cli/upgrade.php
 
 | work sequence | create or add code| template or file name | directory | Details |
 |:---:|:---:|:---|:---|:---|
-| 1 | create | modform_servicename.php | modform | provides a field for entering the access token and app ID of the commercial service on setting page for learning activities |
-| 2 | create | servicename_importcard.php | import | call the "import method" in servicename.php |
+| 1 | create | card_created_servicename.php | xapi/src/transformer/events/mod_sharedpanel | Define contents to export as a xAPI statement. |
+| 2 | add code | get_event_function_map.php | xapi/src/transformer | Add the code to call the newly created 1. |
 
 # Author
 Chikako Nagaoka & KITA Toshihiro
+
 *Some codes in email.php include codes by ming (http://qiita.com/ming/items/ce7b8f394cc9b12a2b49)
 
 # License
