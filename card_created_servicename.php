@@ -21,32 +21,25 @@ defined('MOODLE_INTERNAL') || die();
 use src\transformer\utils as utils;
 
 
-
-function card_created_twitter(array $config, \stdClass $event)
+//change "servicename" to your servicename
+function card_created_servicename(array $config, \stdClass $event)
 {
-
-    date_default_timezone_set('Asia/Tokyo');
 
     $event_other = unserialize($event->other);
 
     $repo = $config['repo'];
 
     $user = $repo->read_record_by_id('user', $event_other['moodleuserid']);
-//    $user = $repo->read_record_by_id('user', "28");
-//    $user = $repo->read_record_by_id('user', $event->userid);
     $course = $repo->read_record_by_id('course', $event->courseid);
     $lang = utils\get_course_lang($course);
-
-//    $event_other = unserialize($event->other);
-
 
     return [[
         'actor' => utils\get_user($config, $user),
         'verb' => [
             'id' => 'http://id.tincanapi.com/verb/viewed',
             'display' => [
+		//change "tweeted" to your activity such as "posted" or "sent"
 		$lang => 'tweeted'
-                //$lang => 'viewed'
             ],
         ],
         'object' => utils\get_activity\course_module(
@@ -62,16 +55,13 @@ function card_created_twitter(array $config, \stdClass $event)
                 'http://learninglocker.net/xapi/cmi/sharedpanel/moodleuserid' => $event_other['moodleuserid'],
                 'http://learninglocker.net/xapi/cmi/sharedpanel/source' => $event_other['source'],
                 'http://learninglocker.net/xapi/cmi/sharedpanel/username' => $event_other['username'],
-                'http://learninglocker.net/xapi/cmi/sharedpanel/timeposted' => Date("Y/m/d G:i:s", $event_other['timeposted']),
-                //'http://learninglocker.net/xapi/cmi/sharedpanel/timeposted' => $event_other['timeposted'],
+                'http://learninglocker.net/xapi/cmi/sharedpanel/timeposted' => Date(DATE_ATOM, $event_other['timeposted']),
                 'http://learninglocker.net/xapi/cmi/sharedpanel/content' => $event_other['content'],
             ],
         ],
 
-        //'timestamp' => utils\get_event_timestamp($event),
-        //'timestamp' => Date("Y/m/d G:i:s", $event_other['timeposted']),
         'timestamp' => Date(DATE_ATOM, $event_other['timeposted']),
-         //'timestamp' => $event_other['timeposted'],
+
         'context' => [
             'platform' => $config['source_name'],
             'language' => $lang,
