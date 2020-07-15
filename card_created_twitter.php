@@ -39,7 +39,6 @@ function card_created_twitter(array $config, \stdClass $event)
             'id' => 'http://id.tincanapi.com/verb/viewed',
             'display' => [
 		$lang => 'tweeted'
-                //$lang => 'viewed'
             ],
         ],
         'object' => utils\get_activity\course_module(
